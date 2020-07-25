@@ -48,7 +48,7 @@ func TestProduct(t *testing.T) {
 		"3560070805259",
 	}
 
-	api := openfoodfacts.NewClient("world", "", "")
+	api := openfoodfacts.NewClient("world", "", "", "SDK-Unit-Test", "0.0", "Golang net/http")
 	api.Sandbox()
 
 	for _, code := range codes {

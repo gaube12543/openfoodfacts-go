@@ -29,10 +29,13 @@ var (
 // Client is an OpenFoodFacts client.
 // It uses the official API as data source.
 type Client struct {
-	locale   string
-	username string
-	password string
-	live     bool
+	locale     string
+	username   string
+	password   string
+	live       bool
+	appName    string
+	platform   string
+	appVersion string
 }
 
 // NewClient returns a Client that is capable of talking to the official OpenFoodFacts database via
@@ -47,12 +50,15 @@ type Client struct {
 //
 // If you are testing your application, you should use the test server in order to use the sandbox environment instead
 // of the live servers. See the Sandbox() method for more detail and an example.
-func NewClient(locale, username, password string) Client {
+func NewClient(locale, username, password, appName, platform, appVersion string) Client {
 	return Client{
-		locale:   locale,
-		username: username,
-		password: password,
-		live:     true,
+		locale:     locale,
+		username:   username,
+		password:   password,
+		live:       true,
+		appName:    appName,
+		platform:   platform,
+		appVersion: appVersion,
 	}
 }
 
@@ -140,6 +146,7 @@ func (h *Client) newRequest(method, format string, args ...interface{}) *http.Re
 
 	url := fmt.Sprintf("%s://%s.openfoodfacts.%s%s", scheme, sub, tld, path)
 	request, err := http.NewRequest(method, url, nil)
+	request.Header.Set("User-Agent", fmt.Sprintf("%s - %s - %s", h.appName, h.appVersion, h.platform))
 	if err != nil {
 		return nil
 	}

@@ -32,7 +32,7 @@ func init() {
 }
 
 func main() {
-	api := openfoodfacts.NewClient("world", "", "")
+	api := openfoodfacts.NewClient("world", "", "", "CoolFoodApp", "Golang net/http", "Version 1.0")
 	product, err := api.Product(code)
 	if err == nil {
 		fmt.Printf("%+v\n", product)
