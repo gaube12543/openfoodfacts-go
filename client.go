@@ -26,6 +26,12 @@ var (
 	ErrUnauthorized = errors.New("Action requires user account")
 )
 
+type OffUserAgent  struct {
+	appName    string
+	platform   string
+	appVersion string
+  }
+
 // Client is an OpenFoodFacts client.
 // It uses the official API as data source.
 type Client struct {
@@ -33,10 +39,8 @@ type Client struct {
 	username   string
 	password   string
 	live       bool
-	appName    string
-	platform   string
-	appVersion string
-}
+	offUserAgent OffUserAgent
+	}
 
 // NewClient returns a Client that is capable of talking to the official OpenFoodFacts database via
 // the HTTP API, or the dev server if live is false.
@@ -50,15 +54,13 @@ type Client struct {
 //
 // If you are testing your application, you should use the test server in order to use the sandbox environment instead
 // of the live servers. See the Sandbox() method for more detail and an example.
-func NewClient(locale, username, password, appName, platform, appVersion string) Client {
+func NewClient(locale, username, password string, offUserAgent OffUserAgent) Client {
 	return Client{
 		locale:     locale,
 		username:   username,
 		password:   password,
 		live:       true,
-		appName:    appName,
-		platform:   platform,
-		appVersion: appVersion,
+		offUserAgent: offUserAgent,
 	}
 }
 
@@ -146,7 +148,7 @@ func (h *Client) newRequest(method, format string, args ...interface{}) *http.Re
 
 	url := fmt.Sprintf("%s://%s.openfoodfacts.%s%s", scheme, sub, tld, path)
 	request, err := http.NewRequest(method, url, nil)
-	request.Header.Set("User-Agent", fmt.Sprintf("%s - %s - %s", h.appName, h.appVersion, h.platform))
+	request.Header.Set("User-Agent", fmt.Sprintf("%s - %s - %s", h.offUserAgent.appName, h.offUserAgent.appVersion, h.offUserAgent.platform))
 	if err != nil {
 		return nil
 	}

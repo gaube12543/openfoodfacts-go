@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/openfoodfacts/openfoodfacts-go"
+	"github.com/gaube12543/openfoodfacts-go"
 )
 
 func TestProduct(t *testing.T) {
@@ -48,7 +48,13 @@ func TestProduct(t *testing.T) {
 		"3560070805259",
 	}
 
-	api := openfoodfacts.NewClient("world", "", "", "SDK-Unit-Test", "0.0", "Golang net/http")
+	useragent := Offuseragent {
+		appName:    "SDK-Unit-Test",
+		platform:   0.0,
+		appVersion: "Golang net/http",
+	}
+
+	api := openfoodfacts.NewClient("world", "", "", useragent)
 	api.Sandbox()
 
 	for _, code := range codes {
